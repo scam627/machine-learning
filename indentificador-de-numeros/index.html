@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IU</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<script>
+    var color = "#000000";
+    var size = 10;
+    var state = false;
+    function paint(e){
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var x = e.clientX - 235;
+        var y = e.clientY - 105;
+        if(state){
+            ctx.fillStyle = color;
+            ctx.fillRect(x,y,size,size);
+        }
+    }
+    function activate(){
+        state = true; 
+    }
+    function deactivate(){
+        state = false;
+    }
+
+</script>
+<body>
+    <div class="container-fluid p-3 mb-2 bg-white text-dark">
+        <center>
+            <h1>INTERFAZ DE USUARIO</h1>
+        </center>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-8 p-3 mb-2 bg-white rounded">
+                <center>
+                    <canvas class="border border-secondary bg-light rounded" width="500" height="500" id="canvas" onmousemove="paint(event);" onmousedown="activate(event)" onmouseup="deactivate()">
+                    </canvas>
+                </center>
+            </div>
+            <div class="col-4 p-3 mb-2 bg-danger rounded text-black">
+                <!-- <div class="row">
+                    <input type="color" id="colores" />
+                </div> -->
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <center>
+                            <button type="button" class="btn btn-success">Guardar</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

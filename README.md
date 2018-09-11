@@ -1,2 +1,3 @@
-# machine-learning
-Repositorio con proyectos y ejemplos de machine learning
+# Machine Learning
+
+En este respositorio encontraras distintos proyectos he implementaciones referentes al campo de la intaligencia artificial y el machine learning

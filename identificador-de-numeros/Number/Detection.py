@@ -53,23 +53,44 @@ class NeuralNetwork(object):
 			for y in range(WS.shape[1]):
 				WP[x][y] = WP[x][y] - self.learning * WS[x][y]
 
+	def PPN(self, Delta, Pesos):
+		"""
+		Se multiplican las derivadas para tener en cuenta cuanto influeyen los pesos por cada
+		neurona de salida
+		"""
+		Vector = np.random.rand(Pesos.shape[0])
+		for x in range(Pesos.shape[0]):
+			Vector[x] = 0
+			for y in range(len(Delta)):
+				Vector[x] += Delta[y]*Pesos[x][y]
+
+		return Vector
+
 	def costFunctionPrime(self, X, y):
+		"""
+		Primera Capa Oculta
+		"""
 		self.yHat = self.forward(X)
 		dJdO = (- y + self.yHat)
 		dOdN = self.yHat * (1 - self.yHat)
 		dNdW3 = self.a3
 		DeltaO = dJdO*dOdN
-		Weights = self.makeWeights(DeltaO,dNdW3)
-		self.Reasignar(Weights,self.W3)
+		Weights3 = self.makeWeights(DeltaO,dNdW3)
+		self.Reasignar(Weights3,self.W3)
 		"""
-		delta3 = np.multiply(-(y - self.yHat), self.sigmoidPrime(self.z3))
-		dJdW2  = np.dot(self.a2.T, delta3)
-
-		delta2 = np.dot(delta3, self.W2.T)*self.sigmoidPrime(self.z2)
-		dJdW1  = np.dot(X.T, delta2) 
-
-		return dJdW1, dJdW2
+		Segunda Capa oculta
 		"""
+		dJtdH = self.PPN(DeltaO,self.W3)
+		dHdN = self.a3 * (1 - self.a3)
+		dNdW2 = self.a2
+		DeltaH = dJtdH*dHdN
+		Weights2 = self.makeWeights(DeltaH,dNdW2)
+		self.Reasignar(Weights2,self.W2)
+		"""
+		Tercera Capa Oculta
+		"""
+
+
 
 
 	# getParams, setParams, computeGradients es solo para comprobar la derivada esta correcta

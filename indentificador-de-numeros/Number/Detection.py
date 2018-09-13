@@ -41,23 +41,33 @@ class NeuralNetwork(object):
 		J = (0.5*np.sum((y - self.yHat)**2, axis=1))
 		return J
 
+	def makeWeights(self, W, O):
+		WM = np.array([])
+		for x in range(len(O)):
+			WF = np.array([])
+			for y in range(len(W)):
+				WF.append(W[y]*O[x])
+			WM.append(WF)
+		print(WM)
+
 	def costFunctionPrime(self, X, y):
 		self.yHat = self.forward(X)
 		dJdO = (- y + self.yHat)
 		dOdN = self.yHat * (1 - self.yHat)
-		dNdW3 = self.a3
+		dNdW3 = np.transpose(self.a3)
 		dJdW3 = []
-		aux = dJdO*dOdN
+		DeltaO = dJdO*dOdN
+		"""
 		for y in range(10):
 			for x in range(8):
 				dJdW3.append((aux)[x] * dNdW3[y][x])
-		
+		"""
+		print(self.yHat)
+		print(y)
 		print(dJdO)
 		print(dOdN)
-		print(self.a3)
-		print(aux)
-		print(dJdW3[1])
-		print(dJdW3[0])
+		print(dNdW3)
+		self.makeWeights(DeltaO,dNdW3)
 		"""
 		delta3 = np.multiply(-(y - self.yHat), self.sigmoidPrime(self.z3))
 		dJdW2  = np.dot(self.a2.T, delta3)
@@ -138,7 +148,7 @@ if __name__ == "__main__":
 	Y_out = np.array([[0,0,0,1],[0,0,1,0],[0,0,1,1],[0,1,0,0],[0,1,0,1],[0,1,1,0],[0,1,1,1],[1,0,0,0],[1,0,0,1],[0,0,0,0]])	
 	Y = NN.forward(X_in)
 	#NN.costFunction(X_in,Y_out)
-	NN.costFunctionPrime(X_in,Y_out)
+	NN.costFunctionPrime(X_in[0],Y_out[0])
 	"""
 	try:
 		print("Lleno")

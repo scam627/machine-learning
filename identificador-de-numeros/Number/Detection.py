@@ -4,15 +4,16 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import os.path
+import random
 
 class NeuralNetwork(object):
 	"""docstring for NeuralNetwork"""
 	def __init__(self):
 		self.inputLayerSize = 35
 		self.outputLayerSize = 4
-		self.hiddenLayerSize1 = 16
-		self.hiddenLayerSize2 = 8
-		self.learning = 0.5
+		self.hiddenLayerSize1 = 20
+		self.hiddenLayerSize2 = 10
+		self.learning = 0.05
 		#weights
 		self.W1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize1)
 		self.W2 = np.random.rand(self.hiddenLayerSize1, self.hiddenLayerSize2)
@@ -38,7 +39,7 @@ class NeuralNetwork(object):
 
 	def costFunction(self, X, y):
 		self.yHat = self.forward(X)
-		J = (0.5*np.sum((y - self.yHat)**2, axis=1))
+		J = (0.5*np.sum((y - self.yHat)**2))
 		return J
 
 	def makeWeights(self, W, O):
@@ -66,7 +67,7 @@ class NeuralNetwork(object):
 
 		return Vector
 
-	def costFunctionPrime(self, X, y):
+	def BackProp(self, X, y):
 		"""
 		Primera Capa Oculta
 		"""
@@ -76,20 +77,26 @@ class NeuralNetwork(object):
 		dNdW3 = self.a3
 		DeltaO = dJdO*dOdN
 		Weights3 = self.makeWeights(DeltaO,dNdW3)
-		self.Reasignar(Weights3,self.W3)
 		"""
 		Segunda Capa oculta
 		"""
 		dJtdH = self.PPN(DeltaO,self.W3)
 		dHdN = self.a3 * (1 - self.a3)
 		dNdW2 = self.a2
-		DeltaH = dJtdH*dHdN
-		Weights2 = self.makeWeights(DeltaH,dNdW2)
-		self.Reasignar(Weights2,self.W2)
+		DeltaH2 = dJtdH*dHdN
+		Weights2 = self.makeWeights(DeltaH2,dNdW2)
 		"""
 		Tercera Capa Oculta
 		"""
+		dNtdO = self.PPN(DeltaH2, self.W2)
+		dHidN = self.a2 * (1 * self.a2)
+		DeltaH1 = dNtdO * dHidN
+		dNdW1 = X
+		Weights1 = self.makeWeights(DeltaH1,dNdW1)
 
+		self.Reasignar(Weights3,self.W3)
+		self.Reasignar(Weights2,self.W2)
+		self.Reasignar(Weights1,self.W1)
 
 
 
@@ -118,35 +125,6 @@ class NeuralNetwork(object):
 		Final = np.concatenate((dJdW1_vector, dJdW2_vector, dJdW3_vector))
 		return Final
 
-class TrainNN(object):
-	"""docstring for TrainNN"""
-	def __init__(self, NN):
-		self.NN = NN
-
-	def costFunctionWrapper(self, params, X, y):
-		self.NN.setParams(params)
-		cost = self.NN.costFunction(X, y)
-		grad = self.NN.computeGradients(X, y)
-		return cost, grad
-
-	def callBack(self, params):
-
-		self.NN.setParams(params)
-		#Add local costs to the cost of the nn
-		self.J.append(self.NN.costFunction(self.X, self.y))
-
-	def train(self, X, y):
-		self.X = X
-		self.y = y
-		#creamos un vector con todos los pesos
-		params0 = self.NN.getParams()
-		self.J = []
-		options = {'maxiter': 1500,"disp" : True}
-		_res = optimize.minimize(self.costFunctionWrapper, params0, jac = True, method = "BFGS", args = (X, y), options = options, callback = self.callBack)
-
-		self.NN.setParams(_res.x)
-		self.optimizationResuts = _res
-
 if __name__ == "__main__":
 	NN = NeuralNetwork()
 	X_in = np.array([[0,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,1,0],
@@ -160,9 +138,32 @@ if __name__ == "__main__":
 					 [0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,0,1,1,1,0],
 					 [0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0]])
 	Y_out = np.array([[0,0,0,1],[0,0,1,0],[0,0,1,1],[0,1,0,0],[0,1,0,1],[0,1,1,0],[0,1,1,1],[1,0,0,0],[1,0,0,1],[0,0,0,0]])	
-	Y = NN.forward(X_in)
-	#NN.costFunction(X_in,Y_out)
-	NN.costFunctionPrime(X_in[0],Y_out[0])
+	
+	for y in range(10):
+		for x in range(1000):
+			n = random.randint(0,9)
+			NN.BackProp(X_in[n],Y_out[n])
+		print("Epoca: ",y," Loss: ", NN.costFunction(X_in[n],Y_out[n]))
+	Y = NN.forward(X_in[0])
+	print("Uno: ",Y)
+	Y = NN.forward(X_in[1])
+	print("Dos: ",Y)
+	Y = NN.forward(X_in[2])
+	print("Tres: ",Y)
+	Y = NN.forward(X_in[3])
+	print("Cuatro: ",Y)
+	Y = NN.forward(X_in[4])
+	print("Cinco: ",Y)
+	Y = NN.forward(X_in[5])
+	print("Seis: ",Y)
+	Y = NN.forward(X_in[6])
+	print("Siete: ",Y)
+	Y = NN.forward(X_in[7])
+	print("Ocho: ",Y)
+	Y = NN.forward(X_in[8])
+	print("Nueve: ",Y)
+	Y = NN.forward(X_in[9])
+	print("Cero: ",Y)
 	"""
 	try:
 		print("Lleno")

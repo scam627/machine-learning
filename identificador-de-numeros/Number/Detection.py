@@ -12,7 +12,7 @@ class NeuralNetwork(object):
 		self.outputLayerSize = 4
 		self.hiddenLayerSize1 = 16
 		self.hiddenLayerSize2 = 8
-
+		self.learning = 0.5
 		#weights
 		self.W1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize1)
 		self.W2 = np.random.rand(self.hiddenLayerSize1, self.hiddenLayerSize2)
@@ -42,32 +42,25 @@ class NeuralNetwork(object):
 		return J
 
 	def makeWeights(self, W, O):
-		WM = np.array([])
+		WM = np.random.rand(len(O), len(W))
 		for x in range(len(O)):
-			WF = np.array([])
 			for y in range(len(W)):
-				WF.append(W[y]*O[x])
-			WM.append(WF)
-		print(WM)
+				WM[x][y] = W[y]*O[x]
+		return WM
+
+	def Reasignar(self, WS, WP):
+		for x in range(WS.shape[0]):
+			for y in range(WS.shape[1]):
+				WP[x][y] = WP[x][y] - self.learning * WS[x][y]
 
 	def costFunctionPrime(self, X, y):
 		self.yHat = self.forward(X)
 		dJdO = (- y + self.yHat)
 		dOdN = self.yHat * (1 - self.yHat)
-		dNdW3 = np.transpose(self.a3)
-		dJdW3 = []
+		dNdW3 = self.a3
 		DeltaO = dJdO*dOdN
-		"""
-		for y in range(10):
-			for x in range(8):
-				dJdW3.append((aux)[x] * dNdW3[y][x])
-		"""
-		print(self.yHat)
-		print(y)
-		print(dJdO)
-		print(dOdN)
-		print(dNdW3)
-		self.makeWeights(DeltaO,dNdW3)
+		Weights = self.makeWeights(DeltaO,dNdW3)
+		self.Reasignar(Weights,self.W3)
 		"""
 		delta3 = np.multiply(-(y - self.yHat), self.sigmoidPrime(self.z3))
 		dJdW2  = np.dot(self.a2.T, delta3)

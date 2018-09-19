@@ -2,14 +2,55 @@
 <html lang="en">
 
 <head>
+    <title>IU</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>pr</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.0"> </script>
 
 <body>
-    hi
+    <div class="container-fluid p-3 mb-2 bg-white text-dark">
+        <center>
+            <h1>PREDICTOR</h1>
+        </center>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-8 p-3 mb-2 bg-white rounded">
+                <center>
+                    <canvas class="border border-secondary bg-light rounded" width="280" height="280" id="canvas" onmousemove="paint(event);"
+                        onmousedown="activate(event)" onmouseup="deactivate()">
+                    </canvas>
+                </center>
+            </div>
+            <div class="col-4 p-3 mb-2 bg-danger rounded text-black">
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <button id="testing" type="button" class="btn btn-primary btn-lg btn-block">Test</button>
+                    </div>
+                </div>
+                <br>
+                <div class="col-12">
+                    <button id="clear" type="button" class="btn btn-primary btn-lg btn-block">Clear</button>
+                </div>
+                <br>
+                <div style="height: 80px; text-align: center; align-items: center; font-size: 32px;" class="col-12 alert alert-success" role="alert">
+                    <p id="output"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <script src="js/index.js"> </script>
+    <script>
+        document.getElementById("clear").addEventListener("click", clear, false);
+        document.getElementById("testing").addEventListener("click", testing, false);
+    </script>
 </body>
 
 </html>

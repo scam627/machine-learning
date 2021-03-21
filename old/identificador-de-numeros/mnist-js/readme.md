@@ -1,3 +1,7 @@
+# NOTE
+
+**Deprecated**
+
 # INSTRUCCIONES
 
 Este proyecto es una implementación desde cero del famoso dataset conocido como mnist que predice números en base a imagenes

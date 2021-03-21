@@ -1,3 +1,5 @@
 # Machine Learning
 
-En este respositorio encontraras distintos proyectos he implementaciones referentes al campo de la intaligencia artificial y el machine learning
+Machine learning notebook history, in this repository you will, can find different models and examples of basic machine learning concepts.
+
+Special thanks to David Augusto Cárdenas Peña, teacher of machine learning in the"Maestria en Ingeniería Eléctrica UTP"

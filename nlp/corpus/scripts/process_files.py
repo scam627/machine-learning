@@ -1,5 +1,7 @@
 import pandas as pd
 
+# To download dialogueText just go this link https://www.kaggle.com/rtatman/ubuntu-dialogue-corpus
+
 filename_list = ['dialogueText']  # ['dialogueText_196','dialogueText_301']
 
 
